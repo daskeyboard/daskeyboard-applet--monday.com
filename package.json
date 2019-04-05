@@ -1,0 +1,93 @@
+{
+  "name": "daskeyboard-applet--monday",
+  "displayName": "monday",
+  "version": "1.0.0",
+  "description": "Displays planning activity.",
+  "longDescription": "Keep an eye on the planning on your Q keyboard!",
+  "officialProductName": "monday",
+  "appUrl": "",
+  "isSingleton": false,
+  "videoUrl": "",
+  "icon": "assets/icon.png",
+  "image": "assets/image-missing.png",
+  "publisher": "Das Keyboard",
+  "authorName": "Das Keyboard",
+  "authorUrl": "https://twitter.com/daskeyboard",
+  "issuesUrl": "https://github.com/daskeyboard/daskeyboard-applet--monday/issues",
+  "homePageUrl": "https://github.com/daskeyboard/daskeyboard-applet--monday",
+  "developerRepoUrl": "https://github.com/daskeyboard/daskeyboard-applet--monday",
+  "licenseUrl": "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt",
+  "changelogUrl": "CHANGELOG.md",
+  "license": "MIT",
+  "readMeUrl": "README.md",
+  "readMeEndUserUrl": "README_ENDUSER.md",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha"
+  },
+  "engines": {
+    "das-keyboard-q": "3.2.3"
+  },
+  "dependencies": {
+    "daskeyboard-applet": "^2.11.4",
+    "mocha": "^5.2.0",
+    "request": "^2.88.0",
+    "btoa": "1.2.1"
+  },
+  "qConfig": {
+    "geometry": {
+      "width": 1,
+      "height": 1,
+      "defaults": {
+        "origin": {
+          "x": 0,
+          "y": 1
+        }
+      }
+    },
+    "authorization": {
+      "type": "apiKey",
+      "hint": "Your monday API key can be found in your user profile.",
+      "supportUrl": "https://www.monday.com/"
+    },
+    "questions": [
+      {
+        "key": "username",
+        "label": "Enter username",
+        "help": "Your username can be found in the monday profile.",
+        "required": true,
+        "placeholder": "e.g: Doctor",
+        "order": 1,
+        "controlType": "textbox"
+      },
+      {
+        "key": "subdomain",
+        "label": "Enter subdomain",
+        "help": "TODO",
+        "required": true,
+        "placeholder": "e.g: daskeyboard",
+        "order": 2,
+        "controlType": "textbox"
+      },
+      {
+        "key": "color",
+        "label": "Select a color",
+        "help": "",
+        "required": true,
+        "order": 3,
+        "controlType": "color",
+        "value": "#ff0000"
+      },
+      {
+        "key": "effect",
+        "label": "Select a notification effect",
+        "help": "",
+        "required": true,
+        "order": 4,
+        "controlType": "effect",
+        "value": "BLINK"
+      }
+    ]
+  }
+}
