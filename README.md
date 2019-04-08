@@ -1,6 +1,6 @@
 # Q Applet: monday.com
 
-This applet displays the activity of the choosen project.
+This applet displays the activity of a choosen project.
 
 For more information visit <https://monday.com/>.
 
