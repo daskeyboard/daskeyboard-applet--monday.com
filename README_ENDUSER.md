@@ -1,6 +1,6 @@
 # monday.com
 
-This applet displays the activity of a choosen project.
+This applet notifies of any update on a chosen project.
 
 monday.com is a tool that simplifies the way teams work together - Manage workload, track projects, move work forward, communicate with people.
 
