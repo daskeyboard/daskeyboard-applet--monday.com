@@ -32,8 +32,7 @@
   "dependencies": {
     "daskeyboard-applet": "^2.11.4",
     "mocha": "^5.2.0",
-    "request": "^2.88.0",
-    "btoa": "1.2.1"
+    "request": "^2.88.0"
   },
   "qConfig": {
     "geometry": {
@@ -53,29 +52,11 @@
     },
     "questions": [
       {
-        "key": "username",
-        "label": "Enter username",
-        "help": "Your username can be found in the monday profile.",
-        "required": true,
-        "placeholder": "e.g: Doctor",
-        "order": 1,
-        "controlType": "textbox"
-      },
-      {
-        "key": "subdomain",
-        "label": "Enter subdomain",
-        "help": "TODO",
-        "required": true,
-        "placeholder": "e.g: daskeyboard",
-        "order": 2,
-        "controlType": "textbox"
-      },
-      {
         "key": "color",
         "label": "Select a color",
         "help": "",
         "required": true,
-        "order": 3,
+        "order": 1,
         "controlType": "color",
         "value": "#ff0000"
       },
@@ -84,7 +65,7 @@
         "label": "Select a notification effect",
         "help": "",
         "required": true,
-        "order": 4,
+        "order": 2,
         "controlType": "effect",
         "value": "BLINK"
       }
