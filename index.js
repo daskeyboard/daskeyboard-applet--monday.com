@@ -34,6 +34,10 @@ async function processBoardsResponse(response) {
       value: board.name.toString()
     });
   }
+  options.push({
+    key: "11111111111111111111",
+    value: "Conversation"
+  })
   logger.info(`got ${options.length} options`);
   options.forEach(o => logger.info(`${o.key}: ${o.value}`));
   return options;
@@ -84,58 +88,124 @@ class monday extends q.DesktopApp {
     let signal = null;
     let message = [];
     let url;
+    let triggered = false;
 
-    try {
-      const board = await request.get({
-        url: baseUrl + `/v1/boards/${this.boardId}.json?api_key=${this.authorization.apiKey}`,
-        json: true
-      });
-
-      logger.info("monday.com running.");
-
-      // Test if there is something inside the response
-      var isBodyEmpty = isEmpty(board) || (board === "[]");
-      if (isBodyEmpty) {
-        logger.info("Response empty when getting choosen board.");
-      }
-      else {
-        
-        // Extract the board information
-
-        if(board.updated_at>this.now){
-          logger.info("Got update on "+board.name);
-
-          // Update signal's message
-          message.push(`<b>${board.name}</b> has been updated.`);
-
-          // Updated the url to the board link
-          url = `${board.url}`;
-          
-          // Updated time
-          this.now = getUtcTime();
-
-          // Create signal
-          signal = new q.Signal({
-            points: [[new q.Point(this.config.color, this.config.effect)]],
-            name: "monday.com",
-            message: message.join("<br>"),
-            link: {
-              url: url,
-              label: 'Show in monday.com',
-            }
-          });
+    logger.info("monday.com running.");
+    // If configuration is the following of the posts, with the id which doesn't exist
+    if(this.boardId == "11111111111111111111"){
+      try {
+        const updates = await request.get({
+          url: baseUrl + `/v1/updates.json?api_key=${this.authorization.apiKey}`,
+          json: true
+        });
+    
+        // Test if there is something inside the response
+        var isBodyEmpty = isEmpty(updates) || (updates === "[]");
+        if (isBodyEmpty) {
+          logger.info("Response empty when getting conversation.");
         }
-        
+        else {
+          
+          // Extract the updates information
+          for (let update of updates){
+            if(update.updated_at>this.now){
 
-        return signal;
+              // Update signal's message
+              if(update.updated_at=update.created_at){
+                logger.info("Created new conversation");
+                message.push(`${update.user.name} created a conversation!`);
+              }else{
+                logger.info("Got update on a post");
+                message.push(`${update.user.name} conversation has been updated.`);
+              }
+  
+              // Updated the url to the board link
+              url = `${update.url}`;
+              
+              // Need to send a signal
+              triggered = true;
+
+            }
+          }
+
+          if(triggered){
+            // Updated time
+            this.now = getUtcTime();
+            // Create signal
+            signal = new q.Signal({
+              points: [[new q.Point(this.config.color, this.config.effect)]],
+              name: "monday.com",
+              message: message.join("<br>"),
+              link: {
+                url: url,
+                label: 'Show in monday.com',
+              }
+            });
+          }
+
+          return signal;
+        }
       }
-    }
-    catch (error) {
-      logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
-      return q.Signal.error([
-        'The monday.com service returned an error. Please check your API key and account.',
-        `Detail: ${error.message}`
-      ]);
+      catch (error) {
+        logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
+        return q.Signal.error([
+          'The monday.com service returned an error. Please check your API key and account.',
+          `Detail: ${error.message}`
+        ]);
+      }
+    }else{
+      try {
+        const board = await request.get({
+          url: baseUrl + `/v1/boards/${this.boardId}.json?api_key=${this.authorization.apiKey}`,
+          json: true
+        });
+  
+        logger.info("monday.com running.");
+  
+        // Test if there is something inside the response
+        var isBodyEmpty = isEmpty(board) || (board === "[]");
+        if (isBodyEmpty) {
+          logger.info("Response empty when getting choosen board.");
+        }
+        else {
+          
+          // Extract the board information
+  
+          if(board.updated_at>this.now){
+            logger.info("Got update on "+board.name);
+  
+            // Update signal's message
+            message.push(`<b>${board.name}</b> has been updated.`);
+  
+            // Updated the url to the board link
+            url = `${board.url}`;
+            
+            // Updated time
+            this.now = getUtcTime();
+  
+            // Create signal
+            signal = new q.Signal({
+              points: [[new q.Point(this.config.color, this.config.effect)]],
+              name: "monday.com",
+              message: message.join("<br>"),
+              link: {
+                url: url,
+                label: 'Show in monday.com',
+              }
+            });
+          }
+          
+  
+          return signal;
+        }
+      }
+      catch (error) {
+        logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
+        return q.Signal.error([
+          'The monday.com service returned an error. Please check your API key and account.',
+          `Detail: ${error.message}`
+        ]);
+      }
     }
 
   }
