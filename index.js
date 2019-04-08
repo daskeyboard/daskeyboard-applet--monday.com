@@ -101,7 +101,6 @@ class monday extends q.DesktopApp {
       else {
         
         // Extract the board information
-        logger.info("This is the board: "+JSON.stringify(board));
 
         if(board.updated_at>this.now){
           logger.info("Got update on "+board.name);
@@ -134,7 +133,7 @@ class monday extends q.DesktopApp {
     catch (error) {
       logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
       return q.Signal.error([
-        'The monday service returned an error. Please check your API key and account.',
+        'The monday.com service returned an error. Please check your API key and account.',
         `Detail: ${error.message}`
       ]);
     }
