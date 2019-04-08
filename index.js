@@ -82,8 +82,6 @@ class monday extends q.DesktopApp {
   // call this function every pollingInterval
   async run() {
     let signal = null;
-    let triggered = false;
-    let urlAlreadyChanged = false;
     let message = [];
     let url;
 
@@ -107,21 +105,13 @@ class monday extends q.DesktopApp {
 
         if(board.updated_at>this.now){
           logger.info("Got update on "+board.name);
-          
+
           // Update signal's message
           message.push(`<b>${board.name}</b> has been updated.`);
 
           // Updated the url to the board link
           url = `${board.url}`;
           
-          // Need to send a signal
-          triggered = true;
-        }
-        
-
-        // If we need to send a signal.
-        if(triggered){
-
           // Updated time
           this.now = getUtcTime();
 
@@ -135,8 +125,8 @@ class monday extends q.DesktopApp {
               label: 'Show in monday.com',
             }
           });
-
         }
+        
 
         return signal;
       }
