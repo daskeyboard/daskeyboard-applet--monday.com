@@ -91,6 +91,7 @@ class monday extends q.DesktopApp {
     let triggered = false;
 
     logger.info("monday.com running.");
+    
     // If configuration is the following of the posts, with the id which doesn't exist
     if(this.boardId == "11111111111111111111"){
       try {
@@ -159,9 +160,7 @@ class monday extends q.DesktopApp {
           url: baseUrl + `/v1/boards/${this.boardId}.json?api_key=${this.authorization.apiKey}`,
           json: true
         });
-  
-        logger.info("monday.com running.");
-  
+    
         // Test if there is something inside the response
         var isBodyEmpty = isEmpty(board) || (board === "[]");
         if (isBodyEmpty) {
