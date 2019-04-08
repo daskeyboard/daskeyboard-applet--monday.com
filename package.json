@@ -53,11 +53,21 @@
     },
     "questions": [
       {
+        "key": "boardId",
+        "label": "Choose a board to track",
+        "help": "select a location from the list",
+        "required": true,
+        "order": 1,
+        "controlType": "dropdown",
+        "dynamic": true,
+        "options": []
+      },
+      {
         "key": "color",
         "label": "Select a color",
         "help": "",
         "required": true,
-        "order": 1,
+        "order": 2,
         "controlType": "color",
         "value": "#ff0000"
       },
@@ -66,7 +76,7 @@
         "label": "Select a notification effect",
         "help": "",
         "required": true,
-        "order": 2,
+        "order": 3,
         "controlType": "effect",
         "value": "BLINK"
       }
