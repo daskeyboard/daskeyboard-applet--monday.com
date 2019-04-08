@@ -36,7 +36,7 @@ async function processBoardsResponse(response) {
   }
   options.push({
     key: "11111111111111111111",
-    value: "Conversation"
+    value: "Conversations from all projects"
   })
   logger.info(`got ${options.length} options`);
   options.forEach(o => logger.info(`${o.key}: ${o.value}`));
@@ -91,7 +91,7 @@ class monday extends q.DesktopApp {
     let triggered = false;
 
     logger.info("monday.com running.");
-    
+
     // If configuration is the following of the posts, with the id which doesn't exist
     if(this.boardId == "11111111111111111111"){
       try {
