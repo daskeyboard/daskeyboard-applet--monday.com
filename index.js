@@ -25,6 +25,19 @@ function isEmpty(obj) {
   return true;
 }
 
+async function processBoardsResponse(response) {
+  logger.info(`Processing monday.com boards response.`);
+  const options = [];
+  for( let board of response){
+    options.push({
+      key: board.id.toString(),
+      value: board.name.toString()
+    });
+  }
+  logger.info(`got ${options.length} options`);
+  options.forEach(o => logger.info(`${o.key}: ${o.value}`));
+  return options;
+}
 
 class monday extends q.DesktopApp {
 
@@ -37,6 +50,33 @@ class monday extends q.DesktopApp {
   async applyConfig() {
     logger.info("monday.com initialisation.");
     this.now = getUtcTime();
+    this.boardId = this.config.boardId;
+  }
+
+  /**
+  * Loads the list of repose from the monday.com API
+  */
+  async  loadBoards() {
+    logger.info(`Loading boards.`);
+    const options = {
+      uri: baseUrl + `/v1/boards.json?api_key=${this.authorization.apiKey}`,
+      json: true
+    }
+    return request.get(options);
+  }
+
+  /**
+  * Called from the Das Keyboard Q software to retrieve the options to display for
+  * the user inputs
+  * @param {} fieldId 
+  * @param {*} search 
+  */
+  async options(fieldId, search) {
+    return this.loadBoards().then(body => {
+      return processBoardsResponse(body);
+    }).catch(error => {
+      logger.error(`Caught error when loading options: ${error}`);
+    });
   }
 
   // call this function every pollingInterval
@@ -48,44 +88,36 @@ class monday extends q.DesktopApp {
     let url;
 
     try {
-      const body = await request.get({
-        url: baseUrl + `/v1/boards.json?api_key=${this.authorization.apiKey}`,
+      const board = await request.get({
+        url: baseUrl + `/v1/boards/${this.boardId}.json?api_key=${this.authorization.apiKey}`,
         json: true
       });
 
       logger.info("monday.com running.");
 
       // Test if there is something inside the response
-      var isBodyEmpty = isEmpty(body) || (body === "[]");
+      var isBodyEmpty = isEmpty(board) || (board === "[]");
       if (isBodyEmpty) {
-        logger.info("Response empty when getting all boards.");
+        logger.info("Response empty when getting choosen board.");
       }
       else {
         
-        // Extract the boards from the response
-        for (let board of body) {
+        // Extract the board information
+        logger.info("This is the board: "+JSON.stringify(board));
 
-          logger.info("This is a board: "+JSON.stringify(board));
+        if(board.updated_at>this.now){
+          logger.info("Got update on "+board.name);
+          
+          // Update signal's message
+          message.push(`<b>${board.name}</b> has been updated.`);
 
-          if(board.updated_at>this.now){
-            logger.info("Got update on "+board.name);
-            // Update signal's message
-            message.push(`<b>${board.name}</b> has been updated.`);
-            // Check if a signal is already set up
-            // in order to change the url
-            if(triggered){
-              if(!urlAlreadyChanged){
-                // Removed "/board/boardID" to go to the main page
-                url = `${board.url}`.substring(0,url.length-16);
-                urlAlreadyChanged=true;
-              }
-            }else{
-              url = `${board.url}`;
-            }
-            // Need to send a signal
-            triggered = true;
-            }
+          // Updated the url to the board link
+          url = `${board.url}`;
+          
+          // Need to send a signal
+          triggered = true;
         }
+        
 
         // If we need to send a signal.
         if(triggered){
