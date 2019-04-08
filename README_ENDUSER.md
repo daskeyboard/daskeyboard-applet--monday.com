@@ -1,6 +1,6 @@
-# Monday
+# monday.com
 
-Displays planning activity.
+This applet displays the activity of the choosen project.
 
 For more information visit <https://monday.com/>.
 
