@@ -1,20 +1,57 @@
 [{
-  "total_issues":1,
-  "issues":[{
-    "title":"TEST1",
-    "order_number":4,
-    "project ": {"id ":75162,"name ": "Website "},
-    "created_on ": "/Date(1554475635027)/ ",
-    "last_updated_on ": "/Date(1554478638197)/ ",
-    "last_updater ":{ "id ":196271, "name ": "Fabien"},
-    "last_viewed_on ": "/Date(1554478663817)/ ",
-    "creator ":{ "id ":196271, "name ": "Fabien"},
-    "tester ":{ "id ":196271, "name ": "Fabien"},
-    "fixer ":{ "id ":196271, "name ": "Fabien"},
-    "priority ":{ "id ":1, "name ": "Low "},
-    "status ":{ "id ":21, "name ": "Closed"},
-    "due_date ":null,
-    "is_public_issue ":false,
-    "tags ":[]
-  }]
+  "url": "https://yourdomain.monday.com/boards/212890254",
+  "id": 212890254,
+  "name": "Start from scratch",
+  "description": null,
+  "columns": [
+    {
+      "id": "name",
+      "title": "Name",
+      "type": "name",
+      "width": 523.005682
+    },
+    {
+      "title": "Person",
+      "type": "person",
+      "id": "person"
+    },
+    {
+      "title": "Status",
+      "type": "color",
+      "labels": {
+        "0": "Working on it",
+        "1": "Done",
+        "2": "Stuck"
+      },
+      "id": "status",
+      "labels_positions_v2": {
+        "0": 0,
+        "1": 2,
+        "2": 1,
+        "5": 3
+      }
+    },
+    {
+      "type": "date",
+      "title": "Date",
+      "id": "date4"
+    }
+  ],
+  "board_kind": "public",
+  "groups": [
+    {
+      "title": "Group Title",
+      "id": "topics",
+      "color": "#579bfc",
+      "board_id": 212890254
+    },
+    {
+      "title": "Group Title",
+      "color": "#a25ddc",
+      "id": "group_title",
+      "board_id": 212890254
+    }
+  ],
+  "created_at": "2019-04-08T15:32:49Z",
+  "updated_at": "2019-04-08T16:50:16Z"
 }]
