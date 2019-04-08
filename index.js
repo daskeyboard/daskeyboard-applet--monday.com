@@ -2,19 +2,16 @@
 const q = require('daskeyboard-applet');
 // Library to send request to API
 const request = require('request-promise');
-// Library to convert to Base64
-const btoa = require('btoa');
 
 const logger = q.logger;
 
-const baseUrl1 = 'https://';
-const baseUrl2 = '.mydonedone.com/issuetracker/api/v2'
+const baseUrl = 'https://api.monday.com:443';
 
 // Get the current time
-function getTime() {
-  var now =  new Date().getTime()/1000;
-  var nowWithoutDot = `${now}`.replace('.','');
-  return nowWithoutDot;
+function getUtcTime() {
+  var now = new Date();
+  var utcTime = dateFormat(now, "isoUtcDateTime");
+  return utcTime;
 }
 
 // Test if an object is empty
@@ -31,47 +28,13 @@ class monday extends q.DesktopApp {
 
   constructor() {
     super();
-    // run every 30 sec
-    this.pollingInterval = 30 * 1000;
+    // run every 20 sec
+    this.pollingInterval = 20 * 1000;
   }
 
   async applyConfig() {
-
-    logger.info("monday initialisation.")
-
-    this.subdomain = this.config.subdomain;
-    this.username = this.config.username;
-    
-    if(this.subdomain){
-
-      // Create and initialize time variable
-      this.now = getTime();
-
-      this.baseUrl = baseUrl1 + this.subdomain + baseUrl2;
-      this.params = `${this.config.username}:${this.authorization.apiKey}`;
-      this.paramsBase64Encoded = btoa(this.params);
-    
-      this.serviceHeaders = {
-        "Authorization": `Basic ${this.paramsBase64Encoded}`,
-      }
-
-      // Get the user ID
-      await request.get({
-        url: `${this.baseUrl}/people/me.json`,
-        headers: this.serviceHeaders,
-        json: true
-      }).then((body) => {
-        this.userId = body.id;
-        logger.info("Got monday userID: "+ this.userId);
-      })
-      .catch(error => {
-        logger.error(
-          `Got error sending request to service: ${JSON.stringify(error)}`);
-      });
-    }else{
-      logger.info("Subdomain is undefined. Configuration is not done yet");
-    }
-
+    logger.info("monday initialisation.");
+    this.now = getUtcTime();
   }
 
   // call this function every pollingInterval
@@ -80,11 +43,10 @@ class monday extends q.DesktopApp {
     let triggered = false;
     let message = [];
     let url;
-    let issueState;
 
     try {
       const body = await request.get({
-        url: `${this.baseUrl}/issues/all.json`,
+        url: `${this.baseUrl}/v1/boards.json`,
         headers: this.serviceHeaders,
         json: true
       });
@@ -98,43 +60,35 @@ class monday extends q.DesktopApp {
       }
       else {
         
-        // Extract the issues from the response
-        for (let issue of body.issues) {
+        // Extract the boards from the response
+        for (let board of body) {
 
-          // If there is an update on a issue AND the user is not the updater.
-          if( (issue.last_updated_on.slice(6,18) > this.now) && (issue.last_updater.id != this.userId) ){
+          logger.info("This is a board: "+board);
 
-            // Check which kind of update is it
-            if(issue.last_updated_on == issue.created_on){
-              issueState = "created";
-              logger.info("Get issue created");
-            }else{
-              issueState = "updated";
-              logger.info("Get issue udpated");
-            }
+          // Update signal's message
+          // message.push(`${issue.title} issue has been ${issueState}. Check ${issue.project.name} project.`);
 
-            // Update signal's message
-            message.push(`${issue.title} issue has been ${issueState}. Check ${issue.project.name} project.`);
+          // Check if a signal is already set up
+          // in order to change the url
+          // if(triggered){
+          //   url = `https://${this.subdomain}.mydonedone.com/issuetracker`
+          // }else{
+          //   url = `https://${this.subdomain}.mydonedone.com/issuetracker/projects/${issue.project.id}/issues/${issue.order_number}`
+          // }
 
-            // Check if a signal is already set up
-            // in order to change the url
-            if(triggered){
-              url = `https://${this.subdomain}.mydonedone.com/issuetracker`
-            }else{
-              url = `https://${this.subdomain}.mydonedone.com/issuetracker/projects/${issue.project.id}/issues/${issue.order_number}`
-            }
+          // Need to send a signal
+          // triggered = true;
 
-            // Need to send a signal
-            triggered = true;
-
-          }
+          
         }
+
+        logger.info("This how the time looks like: "+this.now);
 
         // If we need to send a signal with one or several updates.
         if(triggered){
 
           // Updated time
-          this.now = getTime();
+          this.now = getUtcTime();
 
           // Create signal
           signal = new q.Signal({
