@@ -34,10 +34,11 @@ async function processBoardsResponse(response) {
       value: board.name.toString()
     });
   }
+  // Create fake id which is impossible to get from the API
   options.push({
     key: "11111111111111111111",
     value: "Conversations from all projects"
-  })
+  });
   logger.info(`got ${options.length} options`);
   options.forEach(o => logger.info(`${o.key}: ${o.value}`));
   return options;
@@ -92,7 +93,7 @@ class monday extends q.DesktopApp {
 
     logger.info("monday.com running.");
 
-    // If configuration is the following of the posts, with the id which doesn't exist
+    // If configuration is the following of the posts
     if(this.boardId == "11111111111111111111"){
       try {
         const updates = await request.get({
@@ -215,4 +216,4 @@ module.exports = {
   monday: monday,
 };
 
-const doneDone = new monday();
+const mondayDotCom = new monday();
