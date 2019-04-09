@@ -113,7 +113,7 @@ class monday extends q.DesktopApp {
             if(update.updated_at>this.now){
 
               // Update signal's message
-              if(update.updated_at=update.created_at){
+              if(update.updated_at==update.created_at){
                 logger.info("Created new conversation");
                 message.push(`${update.user.name} created a conversation!`);
               }else{
