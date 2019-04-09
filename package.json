@@ -48,13 +48,13 @@
     },
     "authorization": {
       "type": "apiKey",
-      "hint": "Your monday API key can be found in your user profile.",
+      "hint": "Your monday.com API key can be found in the API section of the admin settings.",
       "supportUrl": "https://www.monday.com/"
     },
     "questions": [
       {
         "key": "boardId",
-        "label": "Choose update to track",
+        "label": "Choose which update to track",
         "help": "select a location from the list",
         "required": true,
         "order": 1,
