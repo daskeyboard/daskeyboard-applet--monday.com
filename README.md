@@ -21,7 +21,7 @@ For more information visit <https://monday.com/>.
 Requires a Das Keyboard Q series: www.daskeyboard.com and a monday account.
 
 Installation, configuration and uninstallation of applets is done within
-the Q Desktop application (<https://www.daskeyboard.com/q)>
+the Q Desktop application (<https://www.daskeyboard.com/q>)
 
 ## Running tests
 
