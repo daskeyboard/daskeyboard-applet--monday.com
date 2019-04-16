@@ -150,8 +150,13 @@ class monday extends q.DesktopApp {
       }
       catch (error) {
         logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
+        if(`${error.message}`.includes("getaddrinfo")){
+          return q.Signal.error(
+            'The monday.com service returned an error. <b>Please check your internet connection</b>.'
+          );
+        }
         return q.Signal.error([
-          'The monday.com service returned an error. Please check your API key and account.',
+          'The monday.com service returned an error. <b>Please check your API key and account</b>.',
           `Detail: ${error.message}`
         ]);
       }
@@ -201,8 +206,13 @@ class monday extends q.DesktopApp {
       }
       catch (error) {
         logger.error(`Got error sending request to service: ${JSON.stringify(error)}`);
+        if(`${error.message}`.includes("getaddrinfo")){
+          return q.Signal.error(
+            'The monday.com service returned an error. <b>Please check your internet connection</b>.'
+          );
+        }
         return q.Signal.error([
-          'The monday.com service returned an error. Please check your API key and account.',
+          'The monday.com service returned an error. <b>Please check your API key and account</b>.',
           `Detail: ${error.message}`
         ]);
       }
