@@ -154,11 +154,12 @@ class monday extends q.DesktopApp {
           return q.Signal.error(
             'The monday.com service returned an error. <b>Please check your internet connection</b>.'
           );
+        }else{
+          return q.Signal.error([
+            'The monday.com service returned an error. <b>Please check your API key and account</b>.',
+            `Detail: ${error.message}`
+          ]);
         }
-        return q.Signal.error([
-          'The monday.com service returned an error. <b>Please check your API key and account</b>.',
-          `Detail: ${error.message}`
-        ]);
       }
     }else{
       try {
@@ -200,7 +201,6 @@ class monday extends q.DesktopApp {
             });
           }
           
-  
           return signal;
         }
       }
@@ -210,11 +210,12 @@ class monday extends q.DesktopApp {
           return q.Signal.error(
             'The monday.com service returned an error. <b>Please check your internet connection</b>.'
           );
+        }else{
+          return q.Signal.error([
+            'The monday.com service returned an error. <b>Please check your API key and account</b>.',
+            `Detail: ${error.message}`
+          ]);
         }
-        return q.Signal.error([
-          'The monday.com service returned an error. <b>Please check your API key and account</b>.',
-          `Detail: ${error.message}`
-        ]);
       }
     }
 
