@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "daskeyboard-applet": "^2.11.4",
-    "mocha": "^5.2.0",
     "request": "^2.88.0",
     "dateformat": "^3.0.3"
   },
@@ -81,5 +80,8 @@
         "value": "BLINK"
       }
     ]
+  },
+  "devDependencies": {
+    "mocha": "^8.3.2"
   }
 }
